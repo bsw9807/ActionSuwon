@@ -9,13 +9,26 @@ public class LoadingManager : MonoBehaviour
 {
     [SerializeField]
     private Image loadingBar;
+    [SerializeField]
+    private TextMeshProUGUI tipText;
+
+
+
+
+
     private void Awake()
     {
+
+
         loadingBar.fillAmount = 0f;
         StartCoroutine("LoadAsyncScene");
     }
     IEnumerator LoadAsyncScene()
     {
+        yield return null;
+        tipText.text = "Tip. " + GameManager.Inst.GetTipMessage(GameManager.Inst.NextScene);
+        
+
         yield return YieldInstructionCache.WaitForSeconds(2f);
         AsyncOperation asyncScene = SceneManager.LoadSceneAsync(GameManager.Inst.NextScene.ToString());
         asyncScene.allowSceneActivation = false;
