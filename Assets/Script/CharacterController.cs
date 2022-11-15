@@ -1,18 +1,19 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharController : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private float           moveSpeed       = 2f;
     private Vector3         move            = Vector3.zero;
-    private Animator animator;
+    private Animator        animator;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
     }
+
 
     private void Update()
     {

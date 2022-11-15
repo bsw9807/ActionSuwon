@@ -1,23 +1,22 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public enum SceneName
 {
-    Intro,
-    Title,
-    Loading,
+    IntroScene,
+    LoadingScene,
+    TitleScene,
     BaseTown,
-    Battle,
-    Boss,
-
+    BattleScene,
+    BossScene,
 }
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
-
     public static GameManager Inst
     {
         get { return instance; }
@@ -25,14 +24,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
             instance = this;
-        else if(instance != this)
+        else if (instance != this)
             Destroy(this.gameObject);
 
         DontDestroyOnLoad(this.gameObject);
     }
 
+
+    #region LoadingLogic
     private SceneName nextScene;
     public SceneName NextScene
     {
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour
     public void AsyncLoadNextScene(SceneName scene)
     {
         nextScene = scene;
-        SceneManager.LoadScene(SceneName.Loading.ToString());
+        SceneManager.LoadScene(SceneName.LoadingScene.ToString());
     }
+    #endregion
+
 }

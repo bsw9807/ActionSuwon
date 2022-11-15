@@ -1,20 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CamResolution : MonoBehaviour
+public class CameraResolution : MonoBehaviour
 {
     private void Awake()
     {
         Camera cam = GetComponent<Camera>();
         Rect rect = cam.rect;
 
-        float scale_Height = ((float)Screen.width / Screen.height) / ((float)16 / 9);
-        float scale_Width = 1 / scale_Height;
-        if (scale_Height < 1)
+        float scale_Heigth = ((float)Screen.width / Screen.height) / ((float)16 / 9);
+        float scale_Width = 1 / scale_Heigth;
+        if(scale_Heigth < 1)
         {
-            rect.height = scale_Height;
-            rect.y = (1f - scale_Height) / 2f;
+            rect.height = scale_Heigth;
+            rect.y = (1f - scale_Heigth) / 2f;
         }
         else
         {
