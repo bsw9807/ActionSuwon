@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 
 public enum SceneName
@@ -12,6 +13,13 @@ public enum SceneName
     BaseTown,
     BattleScene,
     BossScene,
+}
+
+public class PlayerData
+{
+    public string userNickName;
+    public int level;
+
 }
 
 public class GameManager : Singleton<GameManager>
@@ -30,11 +38,19 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
+    private PlayerData pData;
+
+    public PlayerData PlayerInfo
+    {
+        get { return pData; }
+    }
 
 
     private void Awake()
     {
         base.Awake();
+        pData = new PlayerData();
+        dataPath = Application.persistentDataPath + "/save";
 
 
         for(int i = 0; i < table.TipMess.Count; i++)
@@ -48,8 +64,45 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    #region saveData
+    private string dataPath;
 
-    #region TableLogic
+    public void SaveData()
+    {
+        string data = JsonUtility.ToJson(pData);
+        // 암호화 필수
+        File.WriteAllText(dataPath, data);
+    }
+
+    public bool LoadData()
+    {
+        if (File.Exists(dataPath))
+        {
+            string data = File.ReadAllText(dataPath);
+            // 복호화 필수
+            pData = JsonUtility.FromJson<PlayerData>(data);
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckData()
+    {
+        if (File.Exists(dataPath))
+        {
+            return LoadData();
+        }
+        return false;
+    }
+
+    public void DeleteData()
+    {
+        File.Delete(dataPath);
+    }
+
+    #endregion
+
+    #region TipLogic
 
     [SerializeField]
     private ActionGame table;
