@@ -57,9 +57,32 @@ public class Weapon : MonoBehaviour
     {
         yield return YieldInstructionCache.WaitForSeconds(0.1f);
         trail.enabled = true;
-
+        list.Clear();
+        attackCollider.enabled = true;
         yield return YieldInstructionCache.WaitForSeconds(0.5f);
         trail.enabled = false;
+        attackCollider.enabled = false;
+        ApplyDamage();
     }
 
+    List<GameObject> list = new List<GameObject>();
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!list.Contains(other.gameObject))
+        {
+            list.Add(other.gameObject);
+        }
+    }
+
+    private void ApplyDamage()
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].TryGetComponent<IcharBase>(out IcharBase charBase))
+            {
+                charBase.TakeDamage(damage);
+            }
+        }
+    }
 }

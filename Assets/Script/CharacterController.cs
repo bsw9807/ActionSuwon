@@ -2,7 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+interface IcharBase
+{
+    public void TakeDamage(int damage);
+    public void TakeStun(float time);
+}
+
+public class UnitState
+{
+    public int currentHP;
+    public int maxHP;
+    public int defense;
+
+    public int CalcDmg(int takeDamage)
+    {
+        int result = takeDamage - defense;
+        return result > 0 ? result : 1;
+    }
+}
+
+public class CharacterController : MonoBehaviour, IcharBase
 {
     [SerializeField]
     private float           moveSpeed       = 2f;
@@ -12,9 +31,13 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private FixedJoystick joystick;
 
+    private UnitState state = new UnitState();
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        state.currentHP = 10;
+        state.defense = 2;
     }
 
 
@@ -68,5 +91,15 @@ public class CharacterController : MonoBehaviour
             weapon.Attack();
             attackTime = Time.time + attackRate;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Debug.Log(gameObject.name + "Hit! Damage: " + damage);
+    }
+
+    public void TakeStun(float time)
+    {
+        Debug.Log(gameObject.name + "Stun! Time: " + time);
     }
 }
