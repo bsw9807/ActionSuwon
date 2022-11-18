@@ -17,6 +17,6 @@ public class Intro : MonoBehaviour
 
     private void AutoNextScene()
     {
-        GameManager.Inst.AsyncLoadNextScene(SceneName.BaseTown);
+        GameManager.Inst.AsyncLoadNextScene(SceneName.TitleScene);
     }
 }

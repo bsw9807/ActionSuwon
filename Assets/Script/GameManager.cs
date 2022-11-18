@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 
-
 public enum SceneName
 {
     IntroScene,
@@ -15,11 +14,11 @@ public enum SceneName
     BossScene,
 }
 
+
 public class PlayerData
 {
     public string userNickName;
     public int level;
-
 }
 
 public class GameManager : Singleton<GameManager>
@@ -39,7 +38,6 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
     private PlayerData pData;
-
     public PlayerData PlayerInfo
     {
         get { return pData; }
@@ -52,8 +50,9 @@ public class GameManager : Singleton<GameManager>
         pData = new PlayerData();
         dataPath = Application.persistentDataPath + "/save";
 
-
-        for(int i = 0; i < table.TipMess.Count; i++)
+        #region TableData
+        table = Resources.Load<ActionGame>("ActionGame");
+        for (int i = 0; i < table.TipMess.Count; i++)
         {
             if (table.TipMess[i].sceneName == SceneName.BaseTown.ToString())
                 baseTownTip.Add(table.TipMess[i]);
@@ -62,24 +61,23 @@ public class GameManager : Singleton<GameManager>
             else if (table.TipMess[i].sceneName == SceneName.BossScene.ToString())
                 bossTip.Add(table.TipMess[i]);
         }
+        #endregion
     }
-
     #region saveData
     private string dataPath;
 
     public void SaveData()
     {
         string data = JsonUtility.ToJson(pData);
-        // 암호화 필수
+        //  암호화 시키는걸 꼭 해주셔야 해요 
         File.WriteAllText(dataPath, data);
     }
-
     public bool LoadData()
     {
-        if (File.Exists(dataPath))
+        if(File.Exists(dataPath))
         {
             string data = File.ReadAllText(dataPath);
-            // 복호화 필수
+            // 암호화된 데이터를 복호화 
             pData = JsonUtility.FromJson<PlayerData>(data);
             return true;
         }
@@ -88,20 +86,18 @@ public class GameManager : Singleton<GameManager>
 
     public bool CheckData()
     {
-        if (File.Exists(dataPath))
+        if(File.Exists(dataPath))
         {
             return LoadData();
         }
         return false;
     }
-
     public void DeleteData()
     {
         File.Delete(dataPath);
     }
 
     #endregion
-
     #region TipLogic
 
     [SerializeField]
@@ -135,8 +131,16 @@ public class GameManager : Singleton<GameManager>
 
         return result;
     }
-
     #endregion
 
+    #region updateUserData
+    public void UpdateNickName(string newNickName)
+    {
+        pData.userNickName = newNickName;
+        SaveData();
+    }
 
+
+
+    #endregion
 }
