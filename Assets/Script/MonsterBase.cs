@@ -1,34 +1,35 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterBase : MonoBehaviour, IcharBase
-{ 
+public class MonsterBase : MonoBehaviour, ICharBase
+{
+
     private UnitState state = new UnitState();
-    private MeshRenderer meshRenderer;
     private Material material;
     private Animator animator;
+
 
     private void Awake()
     {
         InitMonster();
     }
-
     void InitMonster()
     {
         material = GetComponentInChildren<SkinnedMeshRenderer>().material;
         animator = GetComponent<Animator>();
         state.currentHP = 10;
-        state.defense = 2;
+        state.defence = 2;
     }
+
+
 
     #region Take
     public void TakeDamage(int damage)
     {
-        Debug.Log(gameObject.name + "Stun! Time: " + damage);
         if (state.currentHP > 0)
         {
-            state.currentHP -= state.CalcDmg(damage);
+            state.currentHP -= state.CalculateDamage(damage);
             if (state.currentHP < 1)
                 StartCoroutine(OnDie());
             else
@@ -38,9 +39,10 @@ public class MonsterBase : MonoBehaviour, IcharBase
 
     public void TakeStun(float time)
     {
-        Debug.Log(gameObject.name + "Stun! Time: " + time);
+        Debug.Log(gameObject.name + " 스턴을 당했습니다 시간은 " + time);
     }
     #endregion
+
 
     IEnumerator OnHit()
     {
@@ -53,7 +55,6 @@ public class MonsterBase : MonoBehaviour, IcharBase
             yield return YieldInstructionCache.WaitForSeconds(0.1f);
         }
     }
-
     IEnumerator OnDie()
     {
         animator.SetTrigger("Die");
@@ -66,7 +67,6 @@ public class MonsterBase : MonoBehaviour, IcharBase
 
     [SerializeField]
     private GameObject dropItem;
-
     private void DropItem()
     {
         Instantiate(dropItem, transform.position, Quaternion.identity);

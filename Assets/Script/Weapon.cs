@@ -70,19 +70,17 @@ public class Weapon : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!list.Contains(other.gameObject))
-        {
             list.Add(other.gameObject);
-        }
     }
-
     private void ApplyDamage()
     {
-        for (int i = 0; i < list.Count; i++)
+        for(int i = 0; i < list.Count; i++)
         {
-            if (list[i].TryGetComponent<IcharBase>(out IcharBase charBase))
+            if(list[i].TryGetComponent<ICharBase>(out ICharBase charBase))
             {
                 charBase.TakeDamage(damage);
             }
         }
     }
+
 }

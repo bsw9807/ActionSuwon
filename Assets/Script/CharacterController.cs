@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-interface IcharBase
+interface ICharBase
 {
     public void TakeDamage(int damage);
     public void TakeStun(float time);
@@ -12,16 +12,17 @@ public class UnitState
 {
     public int currentHP;
     public int maxHP;
-    public int defense;
+    public int defence;
 
-    public int CalcDmg(int takeDamage)
+    public int CalculateDamage(int takeDamage)
     {
-        int result = takeDamage - defense;
+        int result = takeDamage - defence;
         return result > 0 ? result : 1;
     }
 }
 
-public class CharacterController : MonoBehaviour, IcharBase
+
+public class CharacterController : MonoBehaviour, ICharBase
 {
     [SerializeField]
     private float           moveSpeed       = 2f;
@@ -37,7 +38,7 @@ public class CharacterController : MonoBehaviour, IcharBase
     {
         animator = GetComponent<Animator>();
         state.currentHP = 10;
-        state.defense = 2;
+        state.defence = 2;
     }
 
 
@@ -95,11 +96,12 @@ public class CharacterController : MonoBehaviour, IcharBase
 
     public void TakeDamage(int damage)
     {
-        Debug.Log(gameObject.name + "Hit! Damage: " + damage);
+        Debug.Log(gameObject.name + " 공격 받았습니다 데미지는 " + damage);
+        //여기다가 기능구현
     }
 
     public void TakeStun(float time)
     {
-        Debug.Log(gameObject.name + "Stun! Time: " + time);
+        Debug.Log(gameObject.name + " 스턴을 당했습니다 시간은 " + time);
     }
 }
