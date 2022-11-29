@@ -33,6 +33,7 @@ public class Title : MonoBehaviour
     public void DeleteBtn()
     {
         GameManager.Inst.DeleteData();
+        InitTitleScene();
     }
     //유저데이터가 없을때 새로 생성하는 팝업에서 데이터 만들어 낼때 
     public void SaveBtn()

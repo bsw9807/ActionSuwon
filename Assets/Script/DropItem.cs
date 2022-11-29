@@ -58,12 +58,11 @@ public class DropItem : MonoBehaviour
 
         if(isDrop && other.CompareTag("Player") )
         {
-            if(other.TryGetComponent<CharacterInventory>(out CharacterInventory character))
+            InventoryItemData newItem = new InventoryItemData();
+            newItem.uid = Random.Range(1001, 1011);
+            newItem.amount = 1;
+            if(GameManager.Inst.LootingItem(newItem))
             {
-                InventoryItemData newItem = new InventoryItemData();
-                newItem.uid = Random.Range(1, 5);
-                newItem.amount = Random.Range(1, 5);
-                character.GetItem(newItem);
                 Destroy(gameObject);
             }
         }

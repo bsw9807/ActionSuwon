@@ -12,7 +12,8 @@ public class NPCBase : MonoBehaviour
         if(!isOn && other.CompareTag("Player"))
         {
             isOn = true;
-            LeanTween.scale(popupObj, Vector3.one, 0.7f).setEase(LeanTweenType.easeOutElastic);
+            if( popupObj.TryGetComponent<IBaseTownPopup>(out IBaseTownPopup popup) )
+                popup.PopupOpen();
         }
     }
     private void OnTriggerExit(Collider other)
@@ -20,7 +21,10 @@ public class NPCBase : MonoBehaviour
         if(isOn && other.CompareTag("Player"))
         {
             isOn = false;
-            LeanTween.scale(popupObj, Vector3.zero, 0.7f).setEase(LeanTweenType.easeOutElastic);
+            if( popupObj.TryGetComponent<IBaseTownPopup>(out IBaseTownPopup popup))
+                popup.PopupClose();
+            
+            
         }
     }
 }

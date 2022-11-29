@@ -484,7 +484,6 @@ GameObject:
   - component: {fileID: 878277782641699939}
   - component: {fileID: 829960293}
   - component: {fileID: 829960292}
-  - component: {fileID: 6324188385990684619}
   - component: {fileID: 829960294}
   m_Layer: 6
   m_Name: Assassin Female 01
@@ -569,21 +568,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  joystick: {fileID: 0}
   attackRate: 1
   weapon: {fileID: 5604941681773671450}
---- !u!114 &6324188385990684619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878277782649037671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 826e67838351d624d818746eb8fad6f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &829960294
 Rigidbody:
   m_ObjectHideFlags: 0

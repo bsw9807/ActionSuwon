@@ -23,8 +23,6 @@ public class MonsterAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         monsterBase = GetComponent<MonsterBase>();
-        InitAI();
-        agent.SetDestination(Vector3.zero);
     }
 
     private Vector3 homePos;
@@ -32,13 +30,104 @@ public class MonsterAI : MonoBehaviour
     {
         state = AI_State.Roaming;
         homePos = transform.position;
+        ChangeAIState(AI_State.Roaming);
     }
-
-    private void ChangeAIState(AI_State newState)
+    public void ChangeAIState(AI_State newState)
     {
         Debug.Log(gameObject.name+ "  "  + state + "에서  " + newState);
+        StopCoroutine(state.ToString());
+        state = newState;
+        StartCoroutine(state.ToString());
+    }
+
+    void SetMoveTarget(Vector3 targetPos)
+    {
+        agent.SetDestination(targetPos);
+    }
+
+    public void SetTarget(GameObject newTarget)
+    {
+        if(state == AI_State.Roaming)
+        {
+            attackTarget = newTarget;
+            ChangeAIState(AI_State.Chase);
+        }
     }
 
 
+    private Vector3 movePos;
+    IEnumerator Roaming()
+    {
+        yield return null;
+
+        while(true)
+        {
+            movePos.x = Random.Range(-3f, 3f);
+            movePos.y = 0f;
+            movePos.z = Random.Range(-3, 3f);
+            SetMoveTarget(movePos + homePos);
+            yield return YieldInstructionCache.WaitForSeconds(Random.Range(3f, 5f));
+        }
+    }
+
+    GameObject attackTarget;
+    IEnumerator Chase()
+    {
+        yield return null;
+        while(attackTarget != null)
+        {
+            if(GetDistanceToTarget() < monsterBase.STATE.attackRange)
+            {
+                ChangeAIState(AI_State.Attack);
+            }
+            else
+            {
+                SetMoveTarget(attackTarget.transform.position);
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        }
+        ChangeAIState(AI_State.ReturnHome);
+    }
+
+    private float GetDistanceToTarget()
+    {
+        if(attackTarget != null)
+        {
+            return (attackTarget.transform.position - transform.position).sqrMagnitude; 
+        }
+        return -1f;
+    }
+
+    IEnumerator Attack()
+    {
+        yield return null;
+        while(attackTarget != null)
+        {
+            if (GetDistanceToTarget() > monsterBase.STATE.attackRange)
+                ChangeAIState(AI_State.Chase);
+            monsterBase.AttackTarget(attackTarget.GetComponent<ICharBase>());
+            yield return YieldInstructionCache.WaitForSeconds(monsterBase.STATE.attackRate);
+        }
+        ChangeAIState(AI_State.ReturnHome);
+    }
+
+    IEnumerator ReturnHome()
+    {
+        yield return null;
+        SetMoveTarget(homePos);
+        while(true)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(1f);
+            if (agent.remainingDistance < 1f)
+                ChangeAIState(AI_State.Roaming);
+        }
+    }
+
+
+
+    IEnumerator Die()
+    {
+        yield return null;
+    }
 
 }

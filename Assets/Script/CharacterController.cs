@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-interface ICharBase
+public interface ICharBase
 {
     public void TakeDamage(int damage);
     public void TakeStun(float time);
@@ -13,6 +13,10 @@ public class UnitState
     public int currentHP;
     public int maxHP;
     public int defence;
+    public int attackDamage;
+    public float attackRange;
+    public float attackRate;
+    public float moveSpeed;
 
     public int CalculateDamage(int takeDamage)
     {
@@ -29,21 +33,25 @@ public class CharacterController : MonoBehaviour, ICharBase
     private Vector3         move            = Vector3.zero;
     private Animator        animator;
 
-    [SerializeField]
     private FixedJoystick joystick;
 
     private UnitState state = new UnitState();
 
+    private Rigidbody rb;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
         state.currentHP = 10;
         state.defence = 2;
+        rb = GetComponent<Rigidbody>();
     }
 
 
     private void Update()
     {
+        rb.velocity = Vector3.zero;
         GetInput();
         Locomotion();
         TryAttack();
